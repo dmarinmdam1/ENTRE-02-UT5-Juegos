@@ -1,95 +1,146 @@
+
 /**
-* Un objeto de esta clase guarda información relativa a un juego
-* 
-* @author -
-*/
-public class Juego {
-	private static final String SEPARADOR = ":";
-	private String titulo;
-	private Genero genero;
-	private int year;
-	private int[] valoraciones;
+ * Un objeto de esta clase guarda información relativa a un juego
+ * 
+ * @author - Daniel Marín Martos
+ */
 
-	/**
-	*  Inicializa los atributos a partir de la información recibida
-	*  Esta información se encuentra en linea
-	*/
-	public Juego(String linea) {
-		 
+public class Juego
+{
+    private static final String SEPARADOR = ":";
+    
+    private String titulo;
+    private Genero genero;
+    private int year;
+    private int[] valoraciones;
 
-	}
+    /**
+     *  Inicializa los atributos a partir de la información recibida
+     *  Esta información se encuentra en linea
+     */
+    
+    public Juego(String linea)
+    {
+        String[] lineaSeparada = linea.split(SEPARADOR);
+        
+        for(int i = 0 ; i < lineaSeparada.length ; i++)
+        {
+            lineaSeparada[i] = lineaSeparada[i].trim();
+        }
+        
+        lineaSeparada[1] = lineaSeparada[1].toUpperCase();
 
-	/**
-	 * accesor título
-	 */
-	public String getTitulo() {
-		return titulo;
-	}
+        titulo = lineaSeparada[0].toUpperCase();
+        genero = Genero.valueOf(lineaSeparada[1]);
+        year = Integer.parseInt(lineaSeparada[2]);
 
-	/**
-	 * accesor género
-	 */
-	public Genero getGenero() {
-		return genero;
-	}
+        valoraciones = new int[10];
+        
+        for(int i = 0 ; i < valoraciones.length ; i++)
+        {
+            valoraciones[i] = Integer.parseInt(lineaSeparada[i + 3]);
+        }
+    }
 
-	/**
-	 * accesor year
-	 */
-	public int getYear() {
-		return year;
-	}
+    /**
+     * accesor título
+     */
+    
+    public String getTitulo()
+    {
+        return titulo;
+    }
 
-	/**
-	 * accesor valoraciones
-	 */
-	public int[] getValoraciones() {
-		return valoraciones;
-	}
+    /**
+     * accesor género
+     */
+    
+    public Genero getGenero()
+    {
+        return genero;
+    }
 
-	/**
-	 * total votos emitidos
-	 */
-	public int getVotos() {
-		 
-		return 0;
-	}
+    /**
+     * accesor year
+     */
+    
+    public int getYear()
+    {
+        return year;
+    }
 
-	/**
-	 *  obtener valoración media
-	 */
-	public double getValoracionMedia() {
-		 
-		return 0;
-	}
+    /**
+     * accesor valoraciones
+     */
+    
+    public int[] getValoraciones()
+    {
+        return valoraciones;
+    }
 
-	/**
-	 *  Un usuario puntúa el juego con un valor entre 1 y 10 
-	 */
-	public void puntuar(int puntuacion) {
-		 
-	}
+    /**
+     * total votos emitidos
+     */
+    
+    public int getVotos()
+    {
+        int votosTotales = 0;
+        
+        for(int i = 0 ; i < valoraciones.length ; i++)
+        {
+            votosTotales += valoraciones[i];
+        }
+        
+        return votosTotales;
+    }
 
-	/**
-	 * Representación textual del juego 
-	 * (Ver enunciado)
-	 */
-	public String toString() {
-		return titulo + "\nGénero: " + this.genero +
-		                    "| Lanzamiento: " + this.year +
-		                    "\nValoración (" + getVotos() + " votos): "
-		                    + String.format("%.2f", this.getValoracionMedia());
+    /**
+     *  obtener valoración media
+     */
+    
+    public double getValoracionMedia()
+    {
+        double sumaValoraciones = 0;
+        
+        for(int i = 0 ; i < valoraciones.length ; i++)
+        {
+            sumaValoraciones += (i + 1) * valoraciones[i];
+        }
+        
+        return sumaValoraciones / getVotos();
+    }
 
-	}
+    /**
+     *  Un usuario puntúa el juego con un valor entre 1 y 10 
+     */
+    
+    public void puntuar(int puntuacion)
+    {
+        valoraciones[puntuacion-1]++;
+    }
 
-	public static void main(String[] args) {
-		Juego juego1 = new Juego(
-		                    "Steep: deporte: 2016  : 0:0:0:0: 0: 0:0:0:12:  10");
-		System.out.println(juego1.toString());
+    /**
+     * Representación textual del juego 
+     * (Ver enunciado)
+     */
+    
+    public String toString()
+    {
+        return titulo + "\nGénero: " + this.genero +
+        "| Lanzamiento: " + this.year +
+        "\nValoración (" + getVotos() + " votos): "
+        + String.format("%.2f", this.getValoracionMedia());
+    }
 
-		Juego juego2 = new Juego(
-		                    "For the King: estrategia: 2018  : 0:0:0:7: 12: 0:33:13:2: 0");
-		System.out.println(juego2.toString());
+    public static void main(String[] args)
+    {
+        Juego juego1 = new Juego("Steep: deporte: 2016  : 0:0:0:0: 0: 0:0:0:12:  10");
+        
+        System.out.println(juego1.toString());
 
-	}
+        Juego juego2 = new Juego("For the King: estrategia: 2018  : 0:0:0:7: 12: 0:33:13:2: 0");
+        
+        System.out.println(juego2.toString());
+    }
 }
+
